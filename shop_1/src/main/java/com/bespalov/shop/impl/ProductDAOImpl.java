@@ -1,43 +1,57 @@
 package com.bespalov.shop.impl;
 
-import com.bespalov.shop.config.Commands;
-import com.bespalov.shop.dao.ProductDAO;
+import com.bespalov.shop.dao.DatabaseDAO;
 import com.bespalov.shop.database.Connection;
 import com.bespalov.shop.model.Product;
+import com.bespalov.shop.repository.ElementRepository;
 
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class ProductDAOImpl implements ProductDAO {
+@XmlRootElement
+@XmlType(name = "productDaoImpl")
+public class ProductDAOImpl implements DatabaseDAO {
     private Connection connection;
-    private Commands commands;
+    private CommandDAOImpl commandDAOImpl;
+    @XmlElementWrapper(name = "productElement", nillable = true)
+    private List<Product> productList;
 
     public ProductDAOImpl() throws ClassNotFoundException {
         connection = new Connection();
-        commands = new Commands();
+        commandDAOImpl = new CommandDAOImpl();
     }
 
-    public void addProduct(Product product) {
-
-
+    public List<Product> getAllElements() {
+        productList = new ArrayList<>();
+        try {
+            ResultSet set = connection.initConnection().executeQuery(commandDAOImpl.getAllProduct());
+            while (set.next()) {
+                productList.add(new Product(set.getString("Title"), set.getString("Incoming_date"),
+                        set.getString("Serial_number"), set.getInt("Count"), set.getString("Condition")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (productList.isEmpty())
+                productList.clear();
+        }
+        return productList;
     }
 
-    public void updateProduct(Product product) {
-
-    }
-
-    public void deleteProduct(String title) {
-
-    }
-
-    public Product getProduct(String title) {
+    public Product getElement(String title) {
         Product product = null;
         try {
-            ResultSet set = connection.initConnection().executeQuery(commands.getProduct("'" + title + "'"));
+            ResultSet set = connection.initConnection().executeQuery(commandDAOImpl.getProduct("'" + title + "'"));
             while (set.next()) {
-                product = new Product(set.getString("Title"), set.getDate("Incoming_date"), set.getString("Serial_number"));
+                product = new Product(set.getString("Title"), set.getString("Incoming_date"),
+                        set.getString("Serial_number"), set.getInt("Count"), set.getString("Condition"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,23 +59,31 @@ public class ProductDAOImpl implements ProductDAO {
         return product;
     }
 
-    public List<Product> getAllProduct() {
-        List<Product> list = new ArrayList<>();
-        try {
-            ResultSet set = connection.initConnection().executeQuery(commands.getAllProduct());
-            while (set.next()) {
-                list.add(new Product(set.getString("Title"), set.getDate("Incoming_date"), set.getString("Serial_number")));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (list.isEmpty())
-                list.clear();
-        }
-        return list;
+    public void addElement(Product product) {
+        connection.getPreparedStatement(commandDAOImpl.addProduct(product));
     }
 
-    public void deleteAllProduct() {
+    public void update(String title, Product product) {
+        connection.getPreparedStatement(commandDAOImpl.updateProduct(title, product));
+    }
 
+    public void deleteElement(String title) {
+        try {
+            connection.initConnection().execute(commandDAOImpl.deleteProduct(title));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void deleteAllElements() {
+
+    }
+
+    @Override
+    public String toString() {
+        return "ProductDAOImpl{" +
+                "productList=" + productList +
+                '}';
     }
 }

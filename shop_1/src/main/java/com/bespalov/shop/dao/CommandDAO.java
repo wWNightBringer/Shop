@@ -10,7 +10,7 @@ public interface CommandDAO {
 
     String addProduct(Product product);
 
-    String updateProduct(Product product);
+    String updateProduct(String title, Product product);
 
     String deleteProduct(String title);
 
@@ -20,7 +20,7 @@ public interface CommandDAO {
 
     String addShop(Shop shop);
 
-    String updateShop(Shop shop);
+    String updateShop(String title,Shop shop);
 
     String deleteShop(String title);
 }

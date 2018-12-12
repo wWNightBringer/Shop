@@ -1,4 +1,4 @@
-package com.bespalov.shop.config;
+package com.bespalov.shop.impl;
 
 import com.bespalov.shop.dao.CommandDAO;
 import com.bespalov.shop.model.Product;
@@ -10,11 +10,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-public class Commands implements CommandDAO {
+//TODO I have already ended class! Probably)
+public class CommandDAOImpl implements CommandDAO {
     private Properties properties;
     private Path path;
 
-    public Commands() {
+    public CommandDAOImpl() {
         path = Paths.get("shop_1/src/main/resources/command.properties");
         properties = new Properties();
         try {
@@ -29,71 +30,70 @@ public class Commands implements CommandDAO {
     @Override
     public String getAllProduct() {
         String msg = properties.getProperty("select.all.products");
-        msg = String.format(msg, "title", "incoming_date", "serial_number", "product");
+        msg = String.format(msg, "title", "incoming_date", "serial_number", "Count", "Condition");
         return msg;
     }
 
     @Override
     public String getProduct(String title) {
         String msg = properties.getProperty("select.one.product");
-        msg = String.format(msg, "title", "incoming_date", "serial_number", title);
+        msg = String.format(msg, "title", "incoming_date", "serial_number", "Count", "Condition", title);
         return msg;
     }
 
-    //TODO proceed init source
     @Override
     public String addProduct(Product product) {
         String msg = properties.getProperty("add.one.product");
-        msg = String.format(msg, "title", "incoming_date", "serial_number");
+        msg = String.format(msg, product.getTitle(), product.getIncomingDate(), product.getSerialNumber(), 1, product.getCount(), product.getCondition());
         return msg;
     }
 
     @Override
-    public String updateProduct(Product product) {
+    public String updateProduct(String title, Product product) {
         String msg = properties.getProperty("update.one.product");
-        msg = String.format(msg, "title", "incoming_date", "serial_number");
+        msg = String.format(msg, product.getTitle(), product.getIncomingDate(), product.getSerialNumber(), 1, product.getCount(), product.getCondition(), title);
         return msg;
     }
 
     @Override
     public String deleteProduct(String title) {
-        String msg = properties.getProperty("select.all.products");
-        msg = String.format(msg, "title", "incoming_date", "serial_number");
+        String msg = properties.getProperty("delete.one.product");
+        msg = String.format(msg, title);
         return msg;
     }
 
     @Override
     public String getAllShop() {
-        String msg = properties.getProperty("select.all.products");
-        msg = String.format(msg, "title", "incoming_date", "serial_number");
+        String msg = properties.getProperty("select.all.shop");
+        msg = String.format(msg, "title", "Shop", "Address");
         return msg;
     }
 
     @Override
     public String getShop(String title) {
-        String msg = properties.getProperty("select.all.products");
-        msg = String.format(msg, "title", "incoming_date", "serial_number");
+        String msg = properties.getProperty("select.one.shop");
+        msg = String.format(msg, "title", "Shop", "Address", title);
         return msg;
     }
 
     @Override
     public String addShop(Shop shop) {
-        String msg = properties.getProperty("select.all.products");
-        msg = String.format(msg, "title", "incoming_date", "serial_number");
+        String msg = properties.getProperty("add.one.shop");
+        msg = String.format(msg, shop.getTitle(), shop.getCity(), shop.getAddress());
         return msg;
     }
 
     @Override
-    public String updateShop(Shop shop) {
-        String msg = properties.getProperty("select.all.products");
-        msg = String.format(msg, "title", "incoming_date", "serial_number");
+    public String updateShop(String title, Shop shop) {
+        String msg = properties.getProperty("update.one.shop");
+        msg = String.format(msg, shop.getTitle(), shop.getCity(), shop.getAddress(), title);
         return msg;
     }
 
     @Override
     public String deleteShop(String title) {
-        String msg = properties.getProperty("select.all.products");
-        msg = String.format(msg, "title", "incoming_date", "serial_number");
+        String msg = properties.getProperty("delete.one.shop");
+        msg = String.format(msg, title);
         return msg;
     }
 }

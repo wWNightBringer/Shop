@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<productDAOImpl>
+    <productElement>
+        <productList>
+            <condition>Has</condition>
+            <count>2</count>
+            <idProduct>0</idProduct>
+            <incomingDate>2018-10-20</incomingDate>
+            <serialNumber>MS356510</serialNumber>
+            <shopId>0</shopId>
+            <title>Mouse_ASUS_3565</title>
+        </productList>
+        <productList>
+            <condition>Processing</condition>
+            <count>1</count>
+            <idProduct>0</idProduct>
+            <incomingDate>2018-05-14</incomingDate>
+            <serialNumber>KB000105</serialNumber>
+            <shopId>0</shopId>
+            <title>Keyboard_HP_0001</title>
+        </productList>
+        <productList>
+            <condition>Has</condition>
+            <count>5</count>
+            <idProduct>0</idProduct>
+            <incomingDate>2018-03-24</incomingDate>
+            <serialNumber>TV478503</serialNumber>
+            <shopId>0</shopId>
+            <title>TV_LG_4785</title>
+        </productList>
+    </productElement>
+</productDAOImpl>
