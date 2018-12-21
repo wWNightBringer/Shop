@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-//TODO I have already ended class! Probably)
 public class CommandDAOImpl implements CommandDAO {
     private Properties properties;
     private Path path;

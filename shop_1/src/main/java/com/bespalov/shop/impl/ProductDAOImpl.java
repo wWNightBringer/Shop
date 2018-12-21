@@ -15,12 +15,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@XmlRootElement
-@XmlType(name = "productDaoImpl")
+//TODO this class use for get data from database
 public class ProductDAOImpl implements DatabaseDAO {
     private Connection connection;
     private CommandDAOImpl commandDAOImpl;
-    @XmlElementWrapper(name = "productElement", nillable = true)
     private List<Product> productList;
 
     public ProductDAOImpl() throws ClassNotFoundException {

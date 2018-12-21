@@ -1,5 +1,6 @@
 package com.bespalov.shop.util;
 
+import com.bespalov.shop.config.ProductWrapper;
 import com.bespalov.shop.dao.DatabaseDAO;
 import com.bespalov.shop.impl.ProductDAOImpl;
 import com.bespalov.shop.model.Product;
@@ -12,6 +13,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
 
 public class JAXBUtil {
@@ -20,38 +22,43 @@ public class JAXBUtil {
     private StringWriter stringWriter;
 
     public JAXBUtil() {
-        path = Paths.get("shop_1/src/main/resources/result.xml");
+        path = Paths.get("shop_1/src/main/resources/shop_store.xml");
+
+    }
+
+    public StringWriter initJAXB(DatabaseDAO databaseDAO) {
         stringWriter = new StringWriter();
-    }
-
-    public void initJAXB(DatabaseDAO databaseDAO) {
         if (databaseDAO == null) {
             throw new NullPointerException();
         }
         try {
-            context = JAXBContext.newInstance(databaseDAO.getClass(), ProductDAOImpl.class);
+            ProductWrapper wrapper = new ProductWrapper();
+            wrapper.getProductList().addAll((Collection<? extends Product>) databaseDAO.getAllElements());
+            context = JAXBContext.newInstance(Product.class, ProductWrapper.class);
             Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
-            marshaller.marshal(databaseDAO, new FileOutputStream(path.toFile()));
-
-
-        } catch (JAXBException | FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getJAXB(DatabaseDAO databaseDAO) {
-        if (databaseDAO == null) {
-            throw new NullPointerException();
-        }
-        try {
-            context = JAXBContext.newInstance(databaseDAO.getClass(), ProductDAOImpl.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            databaseDAO = (DatabaseDAO) unmarshaller.unmarshal(path.toFile());
-            System.out.println(databaseDAO.toString());
+            marshaller.marshal(wrapper, stringWriter);
 
         } catch (JAXBException e) {
             e.printStackTrace();
         }
+        return stringWriter;
     }
+
+    public ProductWrapper getJAXB(String unmarshall) {
+        if (unmarshall == null) {
+            throw new NullPointerException();
+        }
+        StringReader stringReader = new StringReader(unmarshall);
+        try {
+            context = JAXBContext.newInstance(ProductWrapper.class);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            ProductWrapper productWrapper = (ProductWrapper) unmarshaller.unmarshal(stringReader);
+            return productWrapper;
+        } catch (JAXBException e) {
+            e.printStackTrace();
+
+        }
+        throw new NullPointerException();
+    }
+
 }

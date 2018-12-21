@@ -1,5 +1,6 @@
 package com.bespalov.shop.model;
 
+import com.bespalov.shop.annotation.ValidatorAnnotation;
 import com.bespalov.shop.repository.ElementRepository;
 
 import javax.persistence.Basic;
@@ -10,7 +11,8 @@ import javax.persistence.Id;
 @Entity
 public class Shop implements ElementRepository {
     private String title;
-    private String city;
+    @ValidatorAnnotation(formInputData = "[a-zA-Z]{1,30}", errorMessage = "Invalid city")
+    public String city;
     private String address;
     private int idShop;
 

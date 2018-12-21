@@ -31,7 +31,5 @@ public class Factory {
             dao.getAllElements().forEach(System.out::println);
             jaxbUtil.initJAXB(dao);
         }
-
-
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<productDAOImpl>
-    <productElement>
+<product>
+    <products>
         <productList>
             <condition>Has</condition>
             <count>2</count>
@@ -28,5 +28,5 @@
             <shopId>0</shopId>
             <title>TV_LG_4785</title>
         </productList>
-    </productElement>
-</productDAOImpl>
+    </products>
+</product>

@@ -1,18 +1,23 @@
 package com.bespalov.shop.model;
 
+import com.bespalov.shop.annotation.ValidatorAnnotation;
 import com.bespalov.shop.repository.ElementRepository;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @IdClass(ProductPK.class)
 @XmlType(name = "product")
-public class Product implements ElementRepository{
+public class Product implements ElementRepository {
+
     private String title;
     private String incomingDate;
     private String serialNumber;
@@ -34,6 +39,7 @@ public class Product implements ElementRepository{
 
     @Basic
     @Column(name = "Title", nullable = false, length = 100)
+    @XmlElement(name = "title")
     public String getTitle() {
         return title;
     }
@@ -44,6 +50,7 @@ public class Product implements ElementRepository{
 
     @Basic
     @Column(name = "Incoming_date", nullable = false)
+    @XmlElement(name = "incomingDate")
     public String getIncomingDate() {
         return incomingDate;
     }
@@ -54,6 +61,7 @@ public class Product implements ElementRepository{
 
     @Basic
     @Column(name = "Serial_number", nullable = false, length = 50)
+    @XmlElement(name = "serialNumber")
     public String getSerialNumber() {
         return serialNumber;
     }
@@ -64,11 +72,11 @@ public class Product implements ElementRepository{
 
     @Override
     public String toString() {
-        return "Product{" +
-                "title='" + title + '\'' +
-                ", incomingDate=" + incomingDate +
-                ", serialNumber='" + serialNumber + '\'' +
-                '}';
+        return "Title: " + title + '\n' +
+                "IncomingData: " + incomingDate + '\n' +
+                "SerialNumber: " + serialNumber + '\n' +
+                "Count: " + count + '\n' +
+                "Condition: " + condition + '\n';
     }
 
     @Id
@@ -93,6 +101,7 @@ public class Product implements ElementRepository{
 
     @Basic
     @Column(name = "Count", nullable = false)
+    @XmlElement(name = "count")
     public int getCount() {
         return count;
     }
@@ -103,8 +112,14 @@ public class Product implements ElementRepository{
 
     @Basic
     @Column(name = "Condition", nullable = false, length = 50)
+    @XmlElement(name = "condition")
     public String getCondition() {
-        return condition;
+        String[] mas = {"Has", "Processing", "Empty"};
+        List<String> stringList = Arrays.asList(mas);
+        if (stringList.contains(condition))
+            return condition;
+        else
+            return condition = "Incorrect condition";
     }
 
     public void setCondition(String condition) {
